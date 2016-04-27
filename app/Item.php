@@ -37,7 +37,7 @@ class Item extends Model
 
     public function movements()
     {
-    	return $this->hasMany('App\ItemStockMovements', 'stock_id', 'id');
+    	return $this->hasMany('App\ItemStockMovements', 'item_id', 'id');
     }
 
     //FUNCTIONS
@@ -95,8 +95,8 @@ class Item extends Model
 
 
             $this->quantity = $after;
-            $this->save();
             $this->genStockMovement($before, $after, $reason, $cost);
+            $this->save();
 
         }
     }
@@ -109,8 +109,8 @@ class Item extends Model
 
 
             $this->quantity = $after;
-            $this->save();
             $this->genStockMovement($before, $after, $reason, $cost);
+            $this->save();
 
         }
     }

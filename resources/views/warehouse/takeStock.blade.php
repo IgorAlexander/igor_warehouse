@@ -11,24 +11,35 @@
 				<div class="panel-body">
 					<form action="/inventory/{{$item->id}}/take" method="POST" class="form-horizontal">
 						<div class="form-group">
+						{{ csrf_field() }}
 							<label class="col-md-4 control-label">Codigo</label>
-							<label class="col-md-4 col-md-offset-2">{{$item->id}}</label>
+							<div class="col-md-1">
+								<p class="form-control-static">{{$item->id}}</p>
+							</div>
 						</div>
 
 						<div class="form-group">
 							<label class="col-md-4 control-label">Nombre</label>
-							<label class="col-md-4 col-md-offset-2">{{$item->name}}</label>
+							<div class="col-md-4">
+								<p class="form-control-static">{{$item->name}}</p>
+							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-md-2 control-label">Cant.</label>
-							<input class="col-md-2 col-md-offset-1" name="cant">
-							<label class="col-md-2 control-label col-md-offset-2">Costo</label>
-							<input class="col-md-2 col-md-offset-1" name="costo">
+							<label class="col-md-4 control-label">Cant.</label>
+							<div class="col-md-2">
+								<input class="form-control" name="cant">
+							</div>
+							<label class="col-md-2 control-label">Precio</label>
+							<div class="col-md-2">
+								<input class="form-control" name="costo">
+							</div>
 						</div>
-						<div>
-							<button type="submit" class="btn btn-primary col-md-2">
-								Solicitar					
-							</button>
+						<div class="form-group">
+							<div class="col-md-6 col-md-offset-4">
+								<button type="submit" class="btn btn-primary">
+									Solicitar					
+								</button>
+							</div>
 						</div>
 					</form>
 					<form action="/inventory" method="GET" class="form-horizontal">
@@ -41,3 +52,4 @@
 		</div>
 	</div>
 </div>
+@endsection

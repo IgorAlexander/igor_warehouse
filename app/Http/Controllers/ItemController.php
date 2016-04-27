@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Item;
 use App\Category;
 use App\Metric;
+use App\OrdenDeCompra;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -12,7 +13,7 @@ use App\Repositories\ItemRepository;
 
 class ItemController extends Controller
 {
-	protected $items, $categories, $metrics;
+	protected $items, $categories, $metrics, $ocs;
     //
     public function __construct(ItemRepository $items)
     {
@@ -23,6 +24,10 @@ class ItemController extends Controller
 						->get();
 		$this->metrics = Metric::orderBy('name','asc')
 						->get();
+        $this->ocs = OrdenDeCompra::orderBy('id','asc')
+                        ->get();
+
+
 
                 /*
         Category::create([
@@ -118,6 +123,42 @@ class ItemController extends Controller
     		'description' => $request->desc
     		]);
     	return redirect('/inventory');
+    }
+
+    public function storeOC(Request $request, Item $item)
+    {
+        /*$this->validate($request, [
+            'name' => 'required|max:255',
+        ]);*/
+        OrdenDeCompra::create([
+            'item_id' => $item->id,
+            'user_id' => $request->user()->id,
+            'cant' => $request->cant,
+            'cost' => $request->costo
+            ]);
+        return redirect('/inventory');
+    }
+
+    public function storeOV(Request $request, Item $item)
+    {
+        $item->take($request->cant, 'OV', $request->costo);    
+        return redirect('/inventory');
+    }
+
+    public function getOC(Request $request)
+    {
+        return view('warehouse.oc', [
+            'ocs' => $this->ocs
+            ]);
+    }
+
+    public function approveOC(Request $request, OrdenDeCompra $oc)
+    {
+        $item = Item::where('id', $oc->item_id)->first();
+        $item->add($oc->cant, 'OC', $oc->cost);                
+        $oc->approved = true;
+        $oc->save();
+        return redirect('/admin/oc');
     }
 }
 
